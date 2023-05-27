@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <title>大伟哥转圈圈</title>
+	<link rel="icon" type="image/x-icon" href="./favicon-hsr.ico">
+    <meta name="description" content="大伟哥转圈圈">
+    <meta name="keywords" content="Dawei, star rail , 大伟哥 , 转圈圈 , 崩坏星穹铁道 , ">
+    <link rel="canonical" href="https://mihoyo.zip/hsr/Dwzqq/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
+    <link rel="stylesheet" href="style.css" type="text/css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <script src="https://code.iconify.design/iconify-icon/1.0.2/iconify-icon.min.js"></script>
+</head>
+
+<body>
+    <img src="img/dawei1.webp" class="preload" />
+    <img src="img/dawei2.webp" class="preload" />
+    <div id="content">
+        <h1>转圈圈~</h1>
+        <hr id="subtitle-seperator" />
+        <h2>
+          大伟哥转圈圈
+        </h2>
+        <div id="counter-container">
+            <p>转圈圈</p>
+            <br />
+			<br />
+			<br />
+			<br />
+            <br />
+            <p id="counter">0</p>
+            <br />
+            <br />
+			<br />
+			<br />
+			<br />
+            <p id="counter-times">次</p>
+            <button id="counter-button" onclick="counterClick()">
+                转圈圈~!
+            </button>
+        </div>
+        <hr />
+        <div id="grid">
+            <noscript>您的浏览器不支持 JavaScript 或 JavaScript 已被禁用
+                <br />本网站依赖JavaScript，因此请启用它或使用其他浏览器</noscript>
+        </div>
+    </div>
+    <div id="footer">
+            <p>
+                <a href="https://github.com/Rui3128/Dawei_zhuanquanquan/" target="_blank"><iconify-icon icon="mdi:github"
+                        id="github-footer-icon" class="footer-icon"></iconify-icon><span
+                        class="footer-icon-text">GitHub</span></a>
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script>
+    //varible
+    var audioList = [
+        new Audio("audio/zhuanquanquan1.mp3"),
+		new Audio("audio/zhuanquanquan2.mp3"),
+		new Audio("audio/zhuanquanquan3.mp3"),
+    ];
+
+    for (const audio of audioList) {
+        audio.preload = "auto";
+    }
+
+    var firstSquish = true;
+    //end varible
+
+    if (!localStorage.getItem("count")) {
+        localStorage.setItem("count", 0);
+    }
+
+    let temporaryCounter = parseInt(localStorage.getItem("count"));
+    const counterElement = document.getElementById("counter");
+    const counterTimesElement = document.getElementById("counter-times");
+    
+    displayCounter(temporaryCounter);
+
+    //counter button
+    function counterClick() {
+        ++temporaryCounter;
+        displayCounter(temporaryCounter);
+        localStorage.setItem("count", temporaryCounter);
+
+        playKuru();
+        animateHerta();
+    }
+    
+    function displayCounter(value) {
+        counterElement.innerText = value;
+        counterTimesElement.innerText = value === 1 ? "次" : "次";
+    }
+
+    function playKuru() {
+        var audio;
+
+        if (firstSquish) {
+            firstSquish = false;
+            audio = audioList[0].cloneNode();
+        } else {
+            var random = Math.floor(Math.random() * 2) + 1;
+            audio = audioList[random].cloneNode();
+        }
+
+        audio.play();
+
+        audio.addEventListener("ended", function () {
+            this.remove();
+        });
+    }
+
+    function animateHerta() {
+        var counter_button = document.getElementById("counter-button");
+        var id = null;
+
+        var random = Math.floor(Math.random() * 2) + 1;
+        var elem = document.createElement("img");
+        elem.src = `img/dawei${random}.webp`;
+        elem.style.position = "absolute";
+        elem.style.right = "-510px";
+        elem.style.top = counter_button.getClientRects()[0].bottom + scrollY - 430 + "px"
+        elem.style.zIndex = "-1";
+        document.body.appendChild(elem);
+
+        var pos = -510;
+        var limit = window.innerWidth + 510;
+        clearInterval(id);
+        id = setInterval(frame, 12);
+        function frame() {
+            if (pos >= limit) {
+                clearInterval(id);
+                elem.remove()
+            } else {
+                pos += 20;
+                elem.style.right = pos + 'px';
+            }
+        }
+    }
+    //end counter button
+</script>
